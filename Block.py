@@ -13,3 +13,30 @@ class block:
         self.transactions.append(transactions)
         self.hash = hash  
         self.unconfirm_length = unconfirm_length
+
+    def validate_block(self, previous_block):
+        if self.previous_hash != previous_block.hash:
+            return False
+        if self.hash != self.calculate_hash():
+            return False
+        return True
+
+    def serialize(self):
+        return {
+            "index": self.index,
+            "previous_hash": self.previous_hash,
+            "transactions": self.transactions,
+            "hash": self.hash,
+            "unconfirm_length": self.data
+        }
+
+    @staticmethod
+    def deserialize(serialized_block):
+        this_block = block(
+            serialized_block["index"],
+            serialized_block["previous_hash"],
+            serialized_block["transactions"],
+            serialized_block["hash"],
+            serialized_block["unconfirm_length"]
+        )
+        return block
