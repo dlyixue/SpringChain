@@ -1,9 +1,9 @@
 from Crypto.PublicKey import RSA
 
 class user:
-    def __init__(self,name):
-        self.name=name
-        self.balance=0
+    def __init__(self, _name, _balance=100.0):
+        self.name=_name
+        self.balance=_balance
         self.key_pair=RSA.generate(2048)
 
     def getPublickey(self):

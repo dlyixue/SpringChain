@@ -1,4 +1,7 @@
 import Block
+import net
+import db_api
+import 
 # 定义节点类
 class node:
     def __init__(self, name):
@@ -29,7 +32,7 @@ class node:
     
     def create_block(self, new_block_id):
         # 创建区块是检测是否被创建
-        if check_key(new_block_id) == 1:
+        if db_api.get_key(new_block_id) != "":
             print(f"This new block have been created ")
             return 0
         
@@ -60,7 +63,8 @@ class node:
         return 0
     
     def pack_block(self, new_block):
-        new_block.transactions.append("") # 激励
+        
+        new_block.transactions.append() # 激励
         new_block.transactions.append(self.pool[:5])
         
     def confirm_block(self, new_block):

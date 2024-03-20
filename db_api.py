@@ -3,12 +3,12 @@ import csv
 import mysql.connector
 
 def get_key(key):
-    command = "./tmp/etcd-download-test/etcdctl get " + key
+    command = "/tmp/etcd-download-test/etcdctl get " + key
     get_key=os.system(command)
     return get_key
 
 def put_key(key, value):
-    command = "./tmp/etcd-download-test/etcdctl put " + key + " " + value
+    command = "/tmp/etcd-download-test/etcdctl put " + key + " " + value
     get_key=os.system(command)
     return get_key
 

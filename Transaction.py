@@ -28,5 +28,5 @@ class transaction:
         except (ValueError, TypeError):
             return False
 
-    def __str__(self):
-        return f"Transaction: Sender={self.sender_public_key}, Recipient={self.recipient_public_key}, Amount={self.amount}, Timestamp={self.timestamp}"
+    def get_str(self):
+        return str(self.sender_public_key)+" "+str(self.recipient_public_key)+" "+str(self.amount)+" "+str(self.timestamp)
