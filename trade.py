@@ -31,7 +31,7 @@ def trade(sender,receiver,amount):
     if tra.verify_transaction(sign):
         if(sender.setbalance(sender.getbalance()-amount)):
             receiver.setbalance(receiver.getbalance()+amount)
-            print("A Trade generate")
+            print("Trade Create successfully!")
             return True,tra
     print("Sender's balance has NOT sufficient funds.")
-    return False,tra
+    return False,None

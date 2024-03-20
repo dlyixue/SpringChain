@@ -4,11 +4,11 @@ from Crypto.Hash import SHA256
 from Crypto.PublicKey import RSA
 
 class transaction:
-    def __init__(self, sender_public_key, recipient_public_key, amount):
+    def __init__(self, sender_public_key, recipient_public_key, amount,_time_=int(time.time())):
         self.sender_public_key = sender_public_key
         self.recipient_public_key = recipient_public_key
         self.amount = amount
-        self.timestamp = int(time.time())  # 使用当前系统时间戳
+        self.timestamp=_time_
 
     def sign_transaction(self, sender_private_key):
         # 使用发送者私钥对交易进行数字签名
@@ -29,4 +29,10 @@ class transaction:
             return False
 
     def get_str(self):
-        return str(self.sender_public_key)+" "+str(self.recipient_public_key)+" "+str(self.amount)+" "+str(self.timestamp)
+        #(*) is separator
+        return str(self.sender_public_key)+"(*)"+str(self.recipient_public_key)+"(*)"+str(self.amount)+"(*)"+str(self.timestamp)
+
+def str2Tran(str):
+    strlist=str.split("(*)",4)
+    retTra=transaction(strlist[0],strlist[1],strlist[2],strlist[3])
+    return retTra

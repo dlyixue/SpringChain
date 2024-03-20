@@ -39,3 +39,4 @@
 {"level":"info","ts":"2024-03-19T14:20:16.117512+0800","caller":"etcdmain/main.go:44","msg":"notifying init daemon"}
 {"level":"info","ts":"2024-03-19T14:20:16.117533+0800","caller":"etcdmain/main.go:50","msg":"successfully notified init daemon"}
 {"level":"info","ts":"2024-03-19T14:20:16.119069+0800","caller":"embed/serve.go:187","msg":"serving client traffic insecurely; this is strongly discouraged!","traffic":"grpc+http","address":"127.0.0.1:2379"}
+{"level":"info","ts":"2024-03-20T14:20:49.219364+0800","caller":"traceutil/trace.go:171","msg":"trace[948546217] put","detail":"{key:0000000000000000000000000000000000000000000000000000000000000000; req_size:75; response_revision:2; }","duration":"117.901314ms","start":"2024-03-20T14:20:49.094117+0800","end":"2024-03-20T14:20:49.212018+0800","steps":["trace[948546217] 'process raft request'  (duration: 68.670911ms)","trace[948546217] 'store kv pair into bolt db'  (duration: 30.431441ms)"],"step_count":2}
