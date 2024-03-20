@@ -3,7 +3,7 @@ import User
 import Miner
 import random
 
-def createtrade(users):
+def createtrade(users, numOfTrade=10):
     numOfTrade=10
     trades=list()
     n=len(users)

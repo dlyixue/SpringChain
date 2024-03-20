@@ -2,6 +2,7 @@ import os
 import csv
 import mysql.connector
 import Transaction
+import User
 
 def get_key(key):
     command = "/tmp/etcd-download-test/etcdctl get " + key
@@ -53,7 +54,7 @@ def create_user(name,public_key, money):
     # 创建游标对象
     cursor = cnx.cursor()
     # 执行查询语句
-    query1 = '''insert into bank values ("{}","{}",{});
+    query1 = '''INSERT IGNORE INTO bank (name, public_key, amount) VALUES ("{}","{}",{}) ;
             '''.format(name, user, value)
     print(query1)
     cursor.execute(query1)
@@ -61,3 +62,24 @@ def create_user(name,public_key, money):
     cursor.close()
     cnx.commit()
     return 0
+
+def get_users():
+    try:
+        cnx = mysql.connector.connect(user='root', password='123456', database='chain')
+        print('连接成功！')
+    except:
+        print('something wrong!')
+
+    users_key = {}
+    # 连接MySQL数据库
+    # 创建游标对象
+    cursor = cnx.cursor()
+    # 执行查询语句
+    query = 'SELECT name, public_key, amount FROM bank'
+    cursor.execute(query)
+    # 获取查询结果
+    for (name, public_key, amount) in cursor:
+        users_key[name] = public_key
+    # 关闭游标和数据库连接
+    cursor.close()
+    return users_key

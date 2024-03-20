@@ -5,6 +5,8 @@ class user:
         self.name=_name
         self.balance=_balance
         self.key_pair=RSA.generate(2048)
+    
+    def store_user(self):
         db_api.create_user(self.name, self.getPublickey(), self.balance)
 
     def getPublickey(self):

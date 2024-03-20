@@ -10,6 +10,7 @@ class node:
         self.owner = user # 拥有者
         self.chain = []  # 节点维护的区块链
         self.pool = []  # 节点收集的交易池
+        self.hosts = ['xhc_sc1','xhc_sc2']
 
     def get_block_by_index(self, index):
         return self.chain[index]
@@ -59,10 +60,13 @@ class node:
         
     def broadcast_block(self, new_block):
         # 将当前区块广播到其它区块
+        block_string = new_block.serialize()
+        for host in self.hosts:
+            net.send_block(host, 24321, block_string)
         return 0
     
     def pack_block(self, new_block):
-        txn = Transaction.transaction(self.root_key, self.owner.getPublickey(), 10)
+        txn = Transaction.transaction(self.root_key, self.owner, 10)
         new_block.transactions.append(txn) # 激励
         new_block.transactions.extend(self.pool[:5])
         transactions = new_block.transactions
@@ -72,6 +76,8 @@ class node:
         print("create " + new_block.serialize())
         
     def confirm_block(self, new_block):
+        if new_block < 4:
+            return 0
         # 找到最开始的未confirm的块
         tar_block = new_block
         while tar_block.unconfirm_length > 0:
@@ -87,3 +93,8 @@ class node:
         for txn in transactions:
             db_api.exec(txn)
         return 0
+    
+    def add_transactions_to_pool(self, trades):
+        # 将传入的交易列表添加到交易池中
+        for txn in trades:
+            self.pool.append(Transaction.str2Tran(txn))
