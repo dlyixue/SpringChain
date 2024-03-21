@@ -92,6 +92,7 @@ class node:
         transactions = tar_block.transactions
         for txn in transactions:
             db_api.exec(txn)
+        Block.store_block(tar_block)
         return 0
     
     def add_transactions_to_pool(self, trades):

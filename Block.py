@@ -53,3 +53,4 @@ def store_block(block):
     key = block.hash
     value = block.serialize()
     db_api.put_key(key,value)
+    print("store block" + key + " " + value)
