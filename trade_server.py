@@ -1,6 +1,7 @@
 import trade
 import net
 import User
+import time
 # 调用trade函数，自动生成交易，发送到另外两台主机xhc_sc1,xhc_sc2
 
 hosts = ['xhc_sc1','xhc_sc2']
@@ -21,3 +22,4 @@ for i in range(num_trades):
     # Send trades to each host
     for host in hosts:
         net.send_trades(host, 24320, trades)
+    time.sleep(5)
