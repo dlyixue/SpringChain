@@ -33,21 +33,20 @@ class block:
         block_string = json.dumps(block_dict)
         return block_string
 
-    @staticmethod
-    def deserialize(block_string):
-        serialized_block = json.loads(block_string)
-        str_transactions = serialized_block["transactions"]
-        transactions = []
-        for txn in str_transactions:
-            transactions.append(str2Txn(txn))
-        this_block = block(
-            serialized_block["index"],
-            serialized_block["prev_hash"],
-            transactions,
-            serialized_block["hash"],
-            serialized_block["unconfirm_length"]
-        )
-        return block
+def deserialize(block_string):
+    serialized_block = json.loads(block_string)
+    str_transactions = serialized_block["transactions"]
+    transactions = []
+    for txn in str_transactions:
+        transactions.append(Transaction.str2Tran(txn))
+    this_block = block(
+        serialized_block["index"],
+        serialized_block["prev_hash"],
+        transactions,
+        serialized_block["hash"],
+        serialized_block["unconfirm_length"]
+    )
+    return this_block
     
 def store_block(block):
     key = block.hash

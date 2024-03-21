@@ -20,7 +20,7 @@ class user:
     
     def setbalance(self,x):
         try:
-            assert x>0,"your balance must be greater than zero!"
+            assert x>=0,"your balance must be greater than zero!"
             self.balance=x
             return True
         except Exception as ex:
