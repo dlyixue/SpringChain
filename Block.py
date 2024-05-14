@@ -10,7 +10,6 @@ class block:
         self.transactions = []
         self.transactions.extend(transactions)# 包含的交易列表
         self.hash = hash   # 区块的哈希值
-        self.unconfirm_length = unconfirm_length # 未验证的区块长度，根据最长链原则5-6个区块即可
 
     def validate_block(self, previous_block):
         if self.previous_hash != previous_block.hash:
@@ -54,3 +53,27 @@ def store_block(block):
     value = block.serialize()
     db_api.put_key(key,value)
     print("store block" + key + " " + value)
+
+def create_block(new_block_id, prev_block_):
+    # 创建区块是检测是否被创建
+    if db_api.get_key(new_block_id) != 0:
+        print(f"This new block have been created ")
+        return 0
+        
+    # 根据哈希值创建区块
+    prev_block = prev_block_
+    index = prev_block.index + 1
+    prev_hash = prev_block.hash
+    new_block =block.block(index, prev_hash, [], new_block_id)
+    # 将新区块加入到链中
+    return new_block
+    
+def pack_block(self, new_block):
+    txn = Transaction.transaction(self.root_key, self.owner, 10)
+    new_block.transactions.append(txn) # 激励
+    new_block.transactions.extend(self.pool[:5])
+    transactions = new_block.transactions
+    for transaction in transactions:
+        if transaction in self.pool:
+            self.pool.remove(transaction)
+    print("create " + new_block.serialize()) 

@@ -1,6 +1,5 @@
 import Transaction
 import User
-import Miner
 import random
 
 def createtrade(users, numOfTrade=10):
