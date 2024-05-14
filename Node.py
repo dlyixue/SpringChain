@@ -4,13 +4,14 @@ import db_api
 import Transaction
 # 定义节点类
 class node:
-    def __init__(self, name, user, root):
+    def __init__(self, name, root, user, host):
         self.root_key = root # 发送用于激励 
         self.name = name  # 节点名称
         self.owner = user # 拥有者
         self.chain = []  # 节点维护的区块链
         self.pool = []  # 节点收集的交易池
         self.hosts = ['xhc_sc1','xhc_sc2']
+        self.host = host
 
     def get_block_by_index(self, index):
         return self.chain[index]
@@ -56,13 +57,15 @@ class node:
         for transaction in transactions:
             if transaction in self.pool:
                 self.pool.remove(transaction)
+        self.confirm_block(new_block)
         print(f"{self.name} accepted block {index} and updated its chain and pool.")
         
     def broadcast_block(self, new_block):
         # 将当前区块广播到其它区块
         block_string = new_block.serialize()
         for host in self.hosts:
-            net.send_block(host, 24321, block_string)
+            if host != self.host:
+                net.send_block(host, 24321, block_string)
         return 0
     
     def pack_block(self, new_block):
@@ -76,7 +79,7 @@ class node:
         print("create " + new_block.serialize())
         
     def confirm_block(self, new_block):
-        if new_block < 4:
+        if new_block.unconfirm_length < 4:
             return 0
         # 找到最开始的未confirm的块
         tar_block = new_block
@@ -92,9 +95,12 @@ class node:
         transactions = tar_block.transactions
         for txn in transactions:
             db_api.exec(txn)
+        Block.store_block(tar_block)
         return 0
     
     def add_transactions_to_pool(self, trades):
         # 将传入的交易列表添加到交易池中
         for txn in trades:
-            self.pool.append(Transaction.str2Tran(txn))
+            # print(txn)
+            if(txn!=""):
+                self.pool.append(Transaction.str2Tran(txn))

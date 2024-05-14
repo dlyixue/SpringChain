@@ -4,7 +4,6 @@ import Miner
 import random
 
 def createtrade(users, numOfTrade=10):
-    numOfTrade=10
     trades=list()
     n=len(users)
     if n <=1:
@@ -14,7 +13,7 @@ def createtrade(users, numOfTrade=10):
         u2=random.randint(1,n)
         if u2==u1:
             u2==(u1+1)%n +1
-        tmp_amount=random.uniform(0.0,1.0)
+        tmp_amount=random.uniform(0.0,20.0)
         _,tra=trade(users[u1-1],users[u2-1],tmp_amount)
         if tra!=None:
             trades.append(tra.get_str())

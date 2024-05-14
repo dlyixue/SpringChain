@@ -3,7 +3,7 @@ import time
 import random
 
 class miner:
-    def __init__(self, difficulty=100):
+    def __init__(self, difficulty=10):
         self.difficulty = difficulty
 
     def mine_block(self):

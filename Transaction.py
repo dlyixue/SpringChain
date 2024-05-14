@@ -34,5 +34,8 @@ class transaction:
 
 def str2Tran(str):
     strlist=str.split("(*)",4)
+    if(len(strlist)<4):
+        print(len(strlist))
+        print(strlist)
     retTra=transaction(strlist[0],strlist[1],strlist[2],strlist[3])
     return retTra

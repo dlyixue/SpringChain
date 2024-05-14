@@ -5,6 +5,9 @@ import Transaction
 import User
 import trade
 import db_api
+import multiprocessing
+import threading
+import net
 
 import hashlib
 import random
@@ -24,7 +27,8 @@ from Crypto.PublicKey import RSA
 # d.打包区块，从交易池中选择一定数量的交易，构建区块并发送给其他节点
 
 def mine_wrapper(miner, result_queue):
-    result_queue.put(miner.mine_block())
+    while True:
+        result_queue.put(miner.mine_block())
 
 def receive_txn(node):
     net.receive_transactions(node)
@@ -33,19 +37,21 @@ def receive_block(node):
     net.receive_block(node)
     
 if __name__ == "__main__":
+    db_api.init_db()
     users = db_api.get_users()
-    node = Node("n1",users['root'],users['u1'])
-    miner = Miner()
+    node = Node.node("n1",users['root'],users['u1'], "xhc_sc1" )
+    miner = Miner.miner()
+    node.create_genesis_block()
     result_queue = multiprocessing.Queue()
 
     # 启动子进程进行挖矿
     mining_process = multiprocessing.Process(target=mine_wrapper, args=(miner, result_queue))
     mining_process.start()
     # 线程接受交易
-    transaction_thread = threading.Thread(target=receive_transactions, args=(node))
+    transaction_thread = threading.Thread(target=receive_txn, args=(node,))
     transaction_thread.start()
     # 线程接受交易
-    block_thread = threading.Thread(target=receive_block, args=(node))
+    block_thread = threading.Thread(target=receive_block, args=(node,))
     block_thread.start()
 
     i = 10000000
@@ -56,5 +62,6 @@ if __name__ == "__main__":
             # 调用函数创建区块
             new_block = node.create_block(block_hash)
             node.pack_block(new_block)
-            node.confirm_block(new_block)
             node.broadcast_block(new_block)
+            node.confirm_block(new_block)
+            print(i,"get block")
